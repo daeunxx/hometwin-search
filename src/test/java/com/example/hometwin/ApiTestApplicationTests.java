@@ -1,4 +1,4 @@
-package com.example.apitest;
+package com.example.hometwin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

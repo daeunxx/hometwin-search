@@ -1,4 +1,4 @@
-package com.example.apitest;
+package com.example.hometwin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

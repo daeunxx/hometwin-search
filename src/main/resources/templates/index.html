@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>아파트 검색</title>
+    <script type="text/javascript" src="/scripts/jquery-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="/scripts/common/common-ui.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div>
+    <h1>지역명 + 아파트명 검색</h1>
+
+    <form id="searchForm" th:action="@{/search/all_data}" method="get">
+        <table>
+            <tr class="form-group">
+                <td>아파트명</td>
+                <td>
+                    <input class="form-control" id="keyword" name="keyword" placeholder="아파트명을 입력하세요" th:value="${keyword}"> </input>
+                </td>
+            </tr>
+        </table>
+        <button class="btn btn-default">검색</button>
+    </form>
+</div>
+</body>
+</html>
+
