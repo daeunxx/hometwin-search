@@ -15,7 +15,10 @@
 
     <table>
         <tr th:each="data : ${sizeList}">
-            <td><a th:text="${data.sizeType}"></a></td>
+            <td><a
+                    th:href="@{/get/image/thumbnail(aptCode=${session['aptCode']}, sizeType=${data.sizeType}, styleType=${data.styleType})}"
+                    th:text="${data.sizeType}"
+            ></a></td>
             <td
                     th:if="${data.styleType.toString().equals('base')}"
                     th:text="기본형"
@@ -24,7 +27,6 @@
                     th:unless="${data.styleType.toString().equals('base')}"
                     th:text="확장형"
             ></td>
-<!--            <td><a th:href="@{/get/space_info(aptCode=${data.aptCode})}" th:text="${data.aptName}" th:value="${data.aptCode}"></a></td>-->
         </tr>
     </table>
 </div>

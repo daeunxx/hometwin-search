@@ -15,7 +15,10 @@
 
     <table>
         <tr th:each="data : ${apartmentList}">
-            <td><a th:href="@{/get/space_info(aptCode=${data.aptCode})}" th:text="${data.aptName}" th:value="${data.aptCode}"></a></td>
+            <td><a
+                    th:href="@{/get/space_info(aptCode=${data.aptCode})}"
+                    th:text="${data.aptName}" th:value="${data.aptCode}"
+            ></a></td>
         </tr>
     </table>
 </div>
