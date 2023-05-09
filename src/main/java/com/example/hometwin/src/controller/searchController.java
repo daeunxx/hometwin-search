@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.hometwin.src.service.SearchService;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
+@Configuration
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.example.hometwin"})
 public class searchController {
@@ -48,7 +51,7 @@ public class searchController {
 
         System.out.println(responseCode);
         System.out.println(connection.getResponseMessage());
-//        System.out.println(connection.getContent().toString());
+        System.out.println(connection.getContent().toString());
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         StringBuilder builder = new StringBuilder();
@@ -57,9 +60,40 @@ public class searchController {
             builder.append(line);
         }
 
+        System.out.println(reader);
         System.out.println(builder);
-        model.addAttribute("apartmentList", searchService.jsonToObject(builder));
+        model.addAttribute("apartmentList", searchService.SearchList(builder));
 
-        return "apartList";
+        return "apartmentList";
+    }
+
+    @GetMapping("/get/space_info")
+    public String apartmentDetail(String aptCode, Model model) throws IOException {
+        String masterURL = "https://flooropt.prod.genieverse.co.kr/get/space_info?apt_code=" + aptCode;
+
+        URL url = new URL(masterURL);
+
+        HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+        int responseCode = connection.getResponseCode();
+
+        System.out.println(responseCode);
+        System.out.println(connection.getResponseMessage());
+        System.out.println(connection.getContent().toString());
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        System.out.println(reader);
+        System.out.println(builder);
+        model.addAttribute("sizeList", searchService.SizeList(builder));
+
+        return "apartmentDetail";
     }
 }
