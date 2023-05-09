@@ -1,25 +1,40 @@
 package com.example.hometwin.src.controller;
 
-import org.json.JSONObject;
-
 import java.net.URL;
+import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.example.hometwin.src.service.SearchService;
 
 @Controller
-public class SearchController {
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.example.hometwin"})
+public class searchController {
+
+    private final SearchService searchService;
+
+    @Autowired
+    public searchController(SearchService searchService){
+        this.searchService = searchService;
+    }
+
+    @GetMapping("/search")
+    public String apartmentSearch() {
+        return "index";
+    }
 
     @GetMapping("/search/all_data")
-    public String apacheHttpClient(String keyword) throws IOException {
-        System.out.println(keyword);
+    public String apartmentList(String keyword, Model model) throws IOException {
         String query = URLEncoder.encode(keyword, "UTF-8");
         String masterURL = "https://flooropt.prod.genieverse.co.kr/search/all_data?keyword=" + query;
 
@@ -33,8 +48,7 @@ public class SearchController {
 
         System.out.println(responseCode);
         System.out.println(connection.getResponseMessage());
-        System.out.println(connection.getContent().toString());
-
+//        System.out.println(connection.getContent().toString());
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         StringBuilder builder = new StringBuilder();
@@ -43,14 +57,9 @@ public class SearchController {
             builder.append(line);
         }
 
-        JSONObject responseJson = new JSONObject(builder.toString());
-        System.out.println(responseJson);
+        System.out.println(builder);
+        model.addAttribute("apartmentList", searchService.jsonToObject(builder));
 
         return "apartList";
-    }
-
-    @GetMapping("/search")
-    public String hello() {
-        return "index";
     }
 }
