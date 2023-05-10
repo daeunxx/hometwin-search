@@ -1,5 +1,8 @@
 package com.example.hometwin.src.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -9,13 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.hometwin.src.dto.Apartment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class SearchService {
 
-    public List<Apartment> SearchList(StringBuilder builder) throws JsonMappingException, JsonProcessingException {
+    public List<Apartment> getSearchList(StringBuilder builder){
 
         String data = (builder.substring(10, builder.indexOf("]")+1));
 
@@ -37,7 +37,7 @@ public class SearchService {
         return list;
     }
 
-    public List<Apartment> SizeList(StringBuilder builder) throws JsonMappingException, JsonProcessingException {
+    public List<Apartment> getSizeList(StringBuilder builder, String aptCode){
 
         String data = (builder.substring(10, builder.indexOf("]")+1));
 
@@ -49,7 +49,7 @@ public class SearchService {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             Apartment apartment = new Apartment();
 
-            apartment.setAptCode(jsonObject.optString("apt_code"));
+            apartment.setAptCode(aptCode);
             apartment.setSizeType(jsonObject.optString("size_type"));
             apartment.setStyleType(jsonObject.optString("style_type"));
             apartment.setSize(jsonObject.optString("size"));

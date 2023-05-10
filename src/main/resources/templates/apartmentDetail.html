@@ -16,7 +16,7 @@
     <table>
         <tr th:each="data : ${sizeList}">
             <td><a
-                    th:href="@{/get/image/thumbnail(aptCode=${session['aptCode']}, sizeType=${data.sizeType}, styleType=${data.styleType})}"
+                    th:href="@{/get/image/thumbnail(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})}"
                     th:text="${data.sizeType}"
             ></a></td>
             <td
