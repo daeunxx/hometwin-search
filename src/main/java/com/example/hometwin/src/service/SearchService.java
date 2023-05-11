@@ -1,16 +1,18 @@
 package com.example.hometwin.src.service;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.example.hometwin.src.dto.Apartment;
+import com.example.hometwin.src.dto.HomeTwinFile;
+
 
 @Service
 public class SearchService {
@@ -59,5 +61,47 @@ public class SearchService {
         }
 
         return list;
+    }
+
+    public Apartment getApartmentDetail(String aptCode, String sizeType, String styleType){
+
+        Apartment apartment = new Apartment();
+
+        apartment.setAptCode(aptCode);
+        apartment.setSizeType(sizeType);
+        apartment.setStyleType(styleType);
+
+        return apartment;
+    }
+
+    public HomeTwinFile getHomeTwinFile(String data, String aptCode, String sizeType, String styleType){
+
+        JSONObject jsonObject = new JSONObject(data);
+        HomeTwinFile homeTwinFile = new HomeTwinFile();
+
+        homeTwinFile.setAptCode(aptCode);
+        homeTwinFile.setSizeType(sizeType);
+        homeTwinFile.setStyleType(styleType);
+
+        homeTwinFile.setResult(jsonObject.optString("result"));
+        homeTwinFile.setRegionCode(jsonObject.optString("region_code"));
+        homeTwinFile.setGvvFilename(jsonObject.optString("gvv_filename"));
+        homeTwinFile.setGvvContent(jsonObject.optString("gvv_content"));
+        homeTwinFile.setGvfFilename(jsonObject.optString("gvf_filename"));
+        homeTwinFile.setGvfContent(jsonObject.optString("gvf_content"));
+
+        return homeTwinFile;
+    }
+
+    public File createFile(String fileName, String fileContent) throws IOException {
+
+        File file = new File(fileName);
+        FileWriter fileWriter = new FileWriter(file, true);
+
+        fileWriter.write(fileContent);
+        fileWriter.flush();
+        fileWriter.close();
+
+        return file;
     }
 }

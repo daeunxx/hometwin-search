@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>아파트 평형 리스트</title>
+    <title>홈트윈</title>
     <script type="text/javascript" src="/scripts/jquery-ui/jquery.min.js"></script>
     <script type="text/javascript" src="/scripts/common/common-ui.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -13,7 +13,29 @@
 <div>
     <h1>아파트 썸네일</h1>
     <img th:src="${url}" width="500px" height="500px"/>
+    <button class="btn btn-default" id="btn-download">다운로드</button>
+    <div id="fileList"></div>
 </div>
 </body>
+
+<script>
+
+//     $("#btn-download").click(function(){
+//         $.ajax({
+//             method: "POST",
+//             url: "/get/hometwin(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})",
+//             dataType: "json",
+//             success : function() {
+//                 alert("${data.aptCode}");
+//             },
+//             error : function()
+//             {
+//                 alert("There was an unexpected error when removing the users.");
+//             }
+// // window.location =`/get/hometwin?aptCode=aptCode=${apartment.aptCode}, sizeType=${apartment.sizeType}, styleType=${apartment.styleType}`;
+//         });
+//     })
+
+</script>
 </html>
 
