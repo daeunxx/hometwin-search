@@ -11,15 +11,18 @@
 </head>
 <body>
 <div>
-    <h1>아파트 썸네일</h1>
-    <img th:src="${url}" width="500px" height="500px"/>
+    <h2>아파트 썸네일<br></h2>
+    <div><img th:src="${url}" width="500px" height="500px"/></div>
+    <br>
     <button class="btn btn-default" id="btn-download"
-            th:onclick="|location.href='@{/get/hometwin(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})}'|">다운로드</button>
+            th:onclick="|location.href='@{/get/hometwin(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})}'|">다운로드</input>
     <input type="hidden" id="aptCode" th:value="${data.aptCode}"></input>
     <input type="hidden" id="sizeType" th:value="${data.sizeType}"></input>
     <input type="hidden" id="styleType" th:value="${data.styleType}"></input>
     <div id="fileList"></div>
 </div>
+<script>
+</script>
 </body>
 </html>
 

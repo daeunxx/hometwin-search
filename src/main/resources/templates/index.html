@@ -11,17 +11,18 @@
 </head>
 <body>
 <div>
-    <h3>지역명 + 아파트명 검색</h1>
+    <h2>지역명 + 아파트명 검색</h2>
 
     <form id="searchForm" th:action="@{/search/all_data}" method="get">
         <table>
             <tr class="form-group">
-                <td>아파트명</td>
+                <td>아파트명&emsp;</td>
                 <td>
-                    <input class="form-control" id="keyword" name="keyword" placeholder="아파트명을 입력하세요" th:value="${keyword}"> </input>
+                    <input class="form-control" id="keyword" name="keyword" placeholder="아파트명을 입력하세요" th:value="${keyword}"></input>
                 </td>
             </tr>
         </table>
+        <br>
         <button class="btn btn-default">검색</button>
     </form>
 </div>

@@ -11,19 +11,19 @@
 </head>
 <body>
 <div>
-    <h1>아파트 평형 리스트</h1>
+    <h2>아파트 평형 리스트<br></h2>
 
     <table>
         <tr th:each="data : ${sizeList}">
-            <td><a
+            <td ><a style="padding:0 0 3px 0;"
                     th:href="@{/get/image/thumbnail(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})}"
                     th:text="${data.sizeType}"
             ></a></td>
-            <td
+            <td style="padding:0 0 0 20px;"
                     th:if="${data.styleType.toString().equals('base')}"
                     th:text="기본형"
             ></td>
-            <td
+            <td style="padding:0 0 0 20px;"
                     th:unless="${data.styleType.toString().equals('base')}"
                     th:text="확장형"
             ></td>

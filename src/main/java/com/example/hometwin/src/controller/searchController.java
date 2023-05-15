@@ -3,32 +3,36 @@ package com.example.hometwin.src.controller;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.HttpURLConnection;
-import java.io.File;
-import java.io.OutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import jakarta.annotation.Resource;
+import javax.swing.JFileChooser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.apache.commons.io.FileUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.example.hometwin.src.dto.HomeTwinFile;
 import com.example.hometwin.src.service.SearchService;
 
 @Controller
@@ -137,28 +141,25 @@ public class searchController {
         System.out.println(gvvFilePath);
         System.out.println(gvfFilePath);
 
-        File gvvFile = new File(gvvFilePath);
-        File gvfFlie = new File(gvfFilePath);
+        List<Path> files = Arrays.asList(Paths.get(gvvFilePath),
+                Paths.get(gvfFilePath));
 
-        response.setHeader("Content-Disposition", "attachment;filename=" + gvvFile.getName());
-        response.setHeader("Content-Disposition", "attachment;filename=" + gvfFlie.getName());
+        response.setContentType("application/zip"); // zip archive format
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
+                .filename("download.zip", StandardCharsets.UTF_8)
+                .build()
+                .toString());
 
-        FileInputStream gvvFileInputStream = new FileInputStream(gvvFilePath);
-        OutputStream gvvoutputStream = response.getOutputStream();
+        JFileChooser jFileChooser = new JFileChooser();
 
-        FileInputStream gvfFileInputStream = new FileInputStream(gvvFilePath);
-        OutputStream gvfoutputStream = response.getOutputStream();
-
-        int gvvRead = 0;
-        byte[] gvvbuffer = new byte[1024];
-        while ((gvvRead = gvvFileInputStream.read(gvvbuffer)) != -1) {
-            gvvoutputStream.write(gvvbuffer, 0, gvvRead);
-        }
-
-        int gvfRead = 0;
-        byte[] gvfbuffer = new byte[1024];
-        while ((gvfRead = gvfFileInputStream.read(gvfbuffer)) != -1) {
-            gvfoutputStream.write(gvfbuffer, 0, gvfRead);
+        try(ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())){
+            for (Path file : files) {
+                try (InputStream inputStream = Files.newInputStream(file)) {
+                    zipOutputStream.putNextEntry(new ZipEntry(file.getFileName().toString()));
+                    StreamUtils.copy(inputStream, zipOutputStream);
+                    zipOutputStream.flush();
+                }
+            }
         }
     }
 
