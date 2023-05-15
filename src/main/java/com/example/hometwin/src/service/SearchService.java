@@ -1,11 +1,12 @@
 package com.example.hometwin.src.service;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -103,5 +104,45 @@ public class SearchService {
         fileWriter.close();
 
         return file;
+    }
+
+    public StringBuilder getHomeTwinData(String aptCode, String sizeType, String styleType) throws Exception {
+        String masterURL = "https://flooropt.prod.genieverse.co.kr/get/hometwin?"
+                + "apt_code=" + aptCode
+                + "&size_type=" + sizeType
+                + "&style_type=" + styleType
+                + "&flip_code=0";
+
+        URL url = new URL(masterURL);
+
+        HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+        StringBuilder builder = new StringBuilder();
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+
+        return builder;
+    }
+
+    public String getFileName(String aptCode, String sizeType, String styleType, String fileType, StringBuilder builder) throws IOException {
+
+        String filename = new String();
+
+        HomeTwinFile homeTwinFile = new HomeTwinFile();
+        homeTwinFile = this.getHomeTwinFile(builder.toString(), aptCode, sizeType, styleType);
+
+        File file = this.createFile(homeTwinFile.getGvvFilename(), homeTwinFile.getGvvContent());
+
+        if(fileType.equals("gvf"))
+            file = this.createFile(homeTwinFile.getGvfFilename(), homeTwinFile.getGvvContent());
+
+        filename = file.getName();
+
+        return filename;
     }
 }

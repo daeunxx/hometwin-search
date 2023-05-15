@@ -4,22 +4,29 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 import java.io.File;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.apache.commons.io.FileUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.example.hometwin.src.dto.HomeTwinFile;
 import com.example.hometwin.src.service.SearchService;
@@ -117,41 +124,42 @@ public class searchController {
         return "apartmentThumnail";
     }
 
-    @PostMapping("/get/hometwin")
-    public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model) throws IOException {
-        String masterURL = "https://flooropt.prod.genieverse.co.kr/get/hometwin?"
-                + "apt_code=" + aptCode
-                + "&size_type=" + sizeType
-                + "&style_type=" + styleType
-                + "&flip_code=0";
+    @GetMapping("/get/hometwin")
+    public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model, HttpServletResponse response) throws IOException, Exception {
+        StringBuilder builder = searchService.getHomeTwinData(aptCode, sizeType, styleType);
+        String gvvFilename = searchService.getFileName(aptCode, sizeType, styleType, "gvv",  builder);
+        String gvfFilename = searchService.getFileName(aptCode, sizeType, styleType, "gvf",  builder);
 
-        URL url = new URL(masterURL);
+        String rootPath = System.getProperty("user.dir");
+        String gvvFilePath = rootPath +  "\\" + gvvFilename;
+        String gvfFilePath = rootPath +  "\\" + gvfFilename;
 
-        HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        System.out.println(gvvFilePath);
+        System.out.println(gvfFilePath);
 
-        int responseCode = connection.getResponseCode();
+        File gvvFile = new File(gvvFilePath);
+        File gvfFlie = new File(gvfFilePath);
 
-        System.out.println(responseCode);
-        System.out.println(connection.getResponseMessage());
-        System.out.println(connection.getContent().toString());
+        response.setHeader("Content-Disposition", "attachment;filename=" + gvvFile.getName());
+        response.setHeader("Content-Disposition", "attachment;filename=" + gvfFlie.getName());
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-        StringBuilder builder = new StringBuilder();
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-            builder.append(line);
+        FileInputStream gvvFileInputStream = new FileInputStream(gvvFilePath);
+        OutputStream gvvoutputStream = response.getOutputStream();
+
+        FileInputStream gvfFileInputStream = new FileInputStream(gvvFilePath);
+        OutputStream gvfoutputStream = response.getOutputStream();
+
+        int gvvRead = 0;
+        byte[] gvvbuffer = new byte[1024];
+        while ((gvvRead = gvvFileInputStream.read(gvvbuffer)) != -1) {
+            gvvoutputStream.write(gvvbuffer, 0, gvvRead);
         }
 
-        HomeTwinFile homeTwinFile = new HomeTwinFile();
-        homeTwinFile = searchService.getHomeTwinFile(builder.toString(), aptCode, sizeType, styleType);
-
-        File gvvFile = searchService.createFile(homeTwinFile.getGvvFilename(), homeTwinFile.getGvvContent());
-        File gvcFile = searchService.createFile(homeTwinFile.getGvfFilename(), homeTwinFile.getGvfContent());
-
-        System.out.println(gvvFile);
-        System.out.println(gvcFile);
+        int gvfRead = 0;
+        byte[] gvfbuffer = new byte[1024];
+        while ((gvfRead = gvfFileInputStream.read(gvfbuffer)) != -1) {
+            gvfoutputStream.write(gvfbuffer, 0, gvfRead);
+        }
     }
 
 }

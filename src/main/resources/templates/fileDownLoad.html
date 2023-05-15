@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>홈트윈</title>
+    <title>파일 다운로드</title>
     <script type="text/javascript" src="/scripts/jquery-ui/jquery.min.js"></script>
     <script type="text/javascript" src="/scripts/common/common-ui.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -11,14 +11,14 @@
 </head>
 <body>
 <div>
-    <h1>아파트 썸네일</h1>
-    <img th:src="${url}" width="500px" height="500px"/>
-    <button class="btn btn-default" id="btn-download"
-            th:onclick="|location.href='@{/get/hometwin(aptCode=${data.aptCode}, sizeType=${data.sizeType}, styleType=${data.styleType})}'|">다운로드</button>
-    <input type="hidden" id="aptCode" th:value="${data.aptCode}"></input>
-    <input type="hidden" id="sizeType" th:value="${data.sizeType}"></input>
-    <input type="hidden" id="styleType" th:value="${data.styleType}"></input>
-    <div id="fileList"></div>
+    <h1>파일 다운로드</h1>
+
+    <table>
+        <tr><td th:text="${data.result}"></td></tr>
+        <tr><td th:text="${data.regionCode}"></td></tr>
+        <tr><td th:text="${data.gvvFilename}"></td></tr>
+        <tr><td th:text="${data.gvfFilename}"></td></tr>
+    </table>
 </div>
 </body>
 </html>
