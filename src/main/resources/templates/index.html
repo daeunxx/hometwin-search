@@ -1,31 +1,119 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<style>
+    table, th, td {
+        border-collapse: collapse;
+    }
+    th, td, a {
+        padding: 0 0 10px 0;
+    }
+</style>
 <head>
     <meta charset="UTF-8">
     <title>아파트 검색</title>
     <script type="text/javascript" src="/scripts/jquery-ui/jquery.min.js"></script>
     <script type="text/javascript" src="/scripts/common/common-ui.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <div>
     <h2>지역명 + 아파트명 검색</h2>
+    <table>
+        <tr class="form-group">
+            <td>아파트명&emsp;</td>
+            <td>
+                <input class="form-control" id="keyword" name="keyword" th:value="${keyword}"></input>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <button class="btn btn-default" onclick="searchDataSend()">검색</button>
 
-    <form id="searchForm" th:action="@{/search/all_data}" method="get">
-        <table>
-            <tr class="form-group">
-                <td>아파트명&emsp;</td>
-                <td>
-                    <input class="form-control" id="keyword" name="keyword" placeholder="아파트명을 입력하세요" th:value="${keyword}"></input>
-                </td>
-            </tr>
-        </table>
+    <table style="position:absolute; top:80px; left:400px" id="apartmentList" th:fragment="apartmentList">
+        <tr th:each="list : ${apartmentList}">
+            <td>
+                <button class="btn btn-default"
+                        th:text="${list.aptName}" th:value="${list.aptCode}"
+                        onclick="aptCodeSend(this)"></button>
+            </td>
+
+        </tr>
+    </table>
+
+    <table style="position:absolute; top:80px; left:700px" id="sizeList" th:fragment="sizeList">
+        <tr th:each="size : ${sizeList}">
+            <td>
+                <button class="btn btn-default"
+                        th:text="${size.sizeType}" th:value1="${size.aptCode}"
+                        th:value2="${size.sizeType}" th:value3="${size.styleType}"
+                        onclick="searchThumbnail(this)"></button>
+            </td>
+            <td th:if="${size.styleType.toString().equals('base')}"
+                th:text="기본형">
+            </td>
+            <td th:unless="${size.styleType.toString().equals('base')}"
+                th:text="확장형">
+            </td>
+        </tr>
+    </table>
+
+    <div id="thumbnail" th:fragment="thumbnail">
+        <img th:src="${url}" width="300px" height="300px"/>
         <br>
-        <button class="btn btn-default">검색</button>
-    </form>
+        <button class="btn btn-default"
+                th:onclick="|location.href='@{/get/hometwin(aptCode=${thumbnailAptCode}, sizeType=${thumbnailSizeType}, styleType=${thumbnailStyleType})}'|">다운로드</button>
+    </div>
 </div>
 </body>
+
+<script th:inline="javascript">
+
+    $("#thumbnail").hide()
+
+    function searchDataSend() {
+        $.ajax({
+            url: "/search/all_data",
+            data: {
+                keyword : $("#keyword").val()
+            },
+            type: "GET",
+        }).done(function (fragment) {
+            $("#apartmentList").replaceWith(fragment);
+        });
+    }
+
+    function aptCodeSend(item) {
+        var data = $(item).val()
+
+        $.ajax({
+            url: "/get/space_info",
+            data: {
+                aptCode : data
+            },
+            type: "GET",
+        }).done(function (fragment) {
+            $("#sizeList").replaceWith(fragment);
+        });
+    }
+
+    function searchThumbnail(item) {
+
+        $.ajax({
+            url: "/get/image/thumbnail",
+            data: {
+                aptCode : $(item).attr("value1"),
+                sizeType : $(item).attr("value2"),
+                styleType : $(item).attr("value3")
+            },
+            type: "GET",
+        }).done(function (fragment) {
+            $("#thumbnail").replaceWith(fragment);
+        });
+    }
+
+</script>
 </html>
 

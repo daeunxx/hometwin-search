@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.JFileChooser;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -81,7 +79,7 @@ public class searchController {
         System.out.println(builder);
         model.addAttribute("apartmentList", searchService.getSearchList(builder));
 
-        return "apartmentList";
+        return "index :: apartmentList";
     }
 
     @GetMapping("/get/space_info")
@@ -110,7 +108,7 @@ public class searchController {
         System.out.println(builder);
         model.addAttribute("sizeList", searchService.getSizeList(builder, aptCode));
 
-        return "apartmentDetail";
+        return "index :: sizeList";
     }
 
     @RequestMapping("/get/image/thumbnail")
@@ -122,10 +120,13 @@ public class searchController {
                 + "&style_type=" + styleType
                 + "&flip_code=0&img_num=0";
 
-        model.addAttribute("data", searchService.getApartmentDetail(aptCode, sizeType, styleType));
+//        model.addAttribute("data", searchService.getApartmentDetail(aptCode, sizeType, styleType));
+        model.addAttribute("thumbnailAptCode", aptCode);
+        model.addAttribute("thumbnailSizeType", sizeType);
+        model.addAttribute("thumbnailStyleType", styleType);
         model.addAttribute("url", url);
 
-        return "apartmentThumnail";
+        return "index :: thumbnail";
     }
 
     @GetMapping("/get/hometwin")
@@ -149,8 +150,6 @@ public class searchController {
                 .filename("download.zip", StandardCharsets.UTF_8)
                 .build()
                 .toString());
-
-        JFileChooser jFileChooser = new JFileChooser();
 
         try(ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())){
             for (Path file : files) {
