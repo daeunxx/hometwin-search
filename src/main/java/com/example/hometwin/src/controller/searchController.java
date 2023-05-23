@@ -120,7 +120,6 @@ public class searchController {
                 + "&style_type=" + styleType
                 + "&flip_code=0&img_num=0";
 
-//        model.addAttribute("data", searchService.getApartmentDetail(aptCode, sizeType, styleType));
         model.addAttribute("thumbnailAptCode", aptCode);
         model.addAttribute("thumbnailSizeType", sizeType);
         model.addAttribute("thumbnailStyleType", styleType);
