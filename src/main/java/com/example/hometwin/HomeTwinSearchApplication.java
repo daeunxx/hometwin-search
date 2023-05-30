@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-public class ApiTestApplication {
+public class HomeTwinSearchApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ApiTestApplication.class, args);
+        SpringApplication.run(HomeTwinSearchApplication.class, args);
     }
 
 }

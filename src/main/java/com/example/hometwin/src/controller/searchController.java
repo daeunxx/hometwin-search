@@ -16,6 +16,14 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.TableGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -33,10 +41,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import com.example.hometwin.src.service.SearchService;
 
+@Tag(name="HomeTwin Search", description = "HomeTwin Search API")
 @Controller
-@Configuration
-@SpringBootApplication
-@ComponentScan(basePackages = {"com.example.hometwin"})
+@RequestMapping(value = "/api/v1")
 public class searchController {
 
     private final SearchService searchService;
@@ -46,6 +53,11 @@ public class searchController {
         this.searchService = searchService;
     }
 
+//    @Operation(summary = "로그인 메서드", description = "로그인 메서드입니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "successful operation"),
+//            @ApiResponse(responseCode = "400", description = "bad request operation")
+//    })
     @GetMapping("/search")
     public String apartmentSearch() {
         return "index";

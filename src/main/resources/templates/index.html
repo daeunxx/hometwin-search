@@ -69,7 +69,7 @@
         <img th:src="${url}" width="350px" height="350px"/>
         <br>
         <button class="btn btn-default"
-                th:onclick="|location.href='@{/get/hometwin(aptCode=${thumbnailAptCode}, sizeType=${thumbnailSizeType}, styleType=${thumbnailStyleType})}'|">다운로드</button>
+                th:onclick="|location.href='@{/api/v1/get/hometwin(aptCode=${thumbnailAptCode}, sizeType=${thumbnailSizeType}, styleType=${thumbnailStyleType})}'|">다운로드</button>
     </div>
 </div>
 </body>
@@ -80,7 +80,7 @@
 
     function searchDataSend() {
         $.ajax({
-            url: "/search/all_data",
+            url: "/api/v1/search/all_data",
             data: {
                 keyword : $("#keyword").val()
             },
@@ -94,7 +94,7 @@
         var data = $(item).val()
 
         $.ajax({
-            url: "/get/space_info",
+            url: "/api/v1/get/space_info",
             data: {
                 aptCode : data
             },
@@ -107,7 +107,7 @@
     function searchThumbnail(item) {
 
         $.ajax({
-            url: "/get/image/thumbnail",
+            url: "/api/v1/get/image/thumbnail",
             data: {
                 aptCode : $(item).attr("value1"),
                 sizeType : $(item).attr("value2"),
