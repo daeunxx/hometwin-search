@@ -39,29 +39,34 @@
                         th:text="${list.aptName}" th:value="${list.aptCode}"
                         onclick="aptCodeSend(this)"></button>
             </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td th:text="${list.roadAddr}"></td>
 
         </tr>
     </table>
 
-    <table style="position:absolute; top:80px; left:700px" id="sizeList" th:fragment="sizeList">
-        <tr th:each="size : ${sizeList}">
+    <table style="position:absolute; top:80px; left:900px" id="sizeList" th:fragment="sizeList">
+        <tr th:each="apartment : ${sizeList}">
             <td>
                 <button class="btn btn-default"
-                        th:text="${size.sizeType}" th:value1="${size.aptCode}"
-                        th:value2="${size.sizeType}" th:value3="${size.styleType}"
-                        onclick="searchThumbnail(this)"></button>
+                        th:text="${apartment.sizeType}" th:value1="${apartment.aptCode}"
+                        th:value2="${apartment.sizeType}" th:value3="${apartment.styleType}"
+                        onclick="searchThumbnail(this)"></button>&nbsp;&nbsp;
             </td>
-            <td th:if="${size.styleType.toString().equals('base')}"
+            <td th:if="${apartment.styleType.toString().equals('base')}"
                 th:text="기본형">
             </td>
-            <td th:unless="${size.styleType.toString().equals('base')}"
+            <td th:unless="${apartment.styleType.toString().equals('base')}"
                 th:text="확장형">
             </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td th:text="${apartment.size}"></td>
+            <td>㎡</td>
         </tr>
     </table>
 
-    <div id="thumbnail" th:fragment="thumbnail">
-        <img th:src="${url}" width="300px" height="300px"/>
+    <div style="position:absolute; top:170px" id="thumbnail" th:fragment="thumbnail">
+        <img th:src="${url}" width="350px" height="350px"/>
         <br>
         <button class="btn btn-default"
                 th:onclick="|location.href='@{/get/hometwin(aptCode=${thumbnailAptCode}, sizeType=${thumbnailSizeType}, styleType=${thumbnailStyleType})}'|">다운로드</button>
