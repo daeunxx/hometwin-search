@@ -13,7 +13,6 @@ public class HomeTwinFile {
     private String sizeType;            /*평형*/
     private String styleType;           /*일반/확장*/
     private String flieCode;            /*상하좌우 반전*/
-
     private String result;              /*결과*/
     private String regionCode;          /*지역 코드*/
     private String gvvFilename;         /*gvv 파일명*/

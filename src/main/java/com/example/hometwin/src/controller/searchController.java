@@ -53,16 +53,13 @@ public class searchController {
         this.searchService = searchService;
     }
 
-//    @Operation(summary = "로그인 메서드", description = "로그인 메서드입니다.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "successful operation"),
-//            @ApiResponse(responseCode = "400", description = "bad request operation")
-//    })
+    @Operation(summary = "홈 트윈 아파트 검색", description = "키워드로 홈 트윈 아파트 검색")
     @GetMapping("/search")
     public String apartmentSearch() {
         return "index";
     }
 
+    @Operation(summary = "홈 트윈 아파트 리스트 출력", description = "키워드에 해당하는 아파트 리스트 출력")
     @GetMapping("/search/all_data")
     public String apartmentList(String keyword, Model model) throws IOException {
         String query = URLEncoder.encode(keyword, "UTF-8");
@@ -94,6 +91,7 @@ public class searchController {
         return "index :: apartmentList";
     }
 
+    @Operation(summary = "홈 트윈 아파트 평형 리스트 출력", description = "해당 아파트 코드 해당하는 평형 리스트 출력")
     @GetMapping("/get/space_info")
     public String apartmentDetail(String aptCode, Model model, HttpServletRequest request) throws IOException {
         String masterURL = "https://flooropt.prod.genieverse.co.kr/get/space_info?apt_code=" + aptCode;
@@ -123,6 +121,7 @@ public class searchController {
         return "index :: sizeList";
     }
 
+    @Operation(summary = "도면 썸네일 출력", description = "아파트 코드와 평형 정보에 해당하는 도면 썸네일 출력")
     @RequestMapping("/get/image/thumbnail")
     public String apartmentThumbnail(String aptCode, String sizeType, String styleType, Model model, HttpServletRequest request) throws IOException {
 
@@ -140,6 +139,7 @@ public class searchController {
         return "index :: thumbnail";
     }
 
+    @Operation(summary = "홈 트윈 파일 다운로드", description = "gvv/gvf 콘텐츠 파일 다운로드")
     @GetMapping("/get/hometwin")
     public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model, HttpServletResponse response) throws IOException, Exception {
         StringBuilder builder = searchService.getHomeTwinData(aptCode, sizeType, styleType);
