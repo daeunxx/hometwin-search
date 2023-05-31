@@ -143,22 +143,24 @@ public class searchController {
     @GetMapping("/get/hometwin")
     public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model, HttpServletResponse response) throws IOException, Exception {
         StringBuilder builder = searchService.getHomeTwinData(aptCode, sizeType, styleType);
+
         String gvvFilename = searchService.getFileName(aptCode, sizeType, styleType, "gvv",  builder);
         String gvfFilename = searchService.getFileName(aptCode, sizeType, styleType, "gvf",  builder);
+        String fileName = gvvFilename.substring(0, gvvFilename.length() - 4);
 
         String rootPath = System.getProperty("user.dir");
         String gvvFilePath = rootPath +  "\\" + gvvFilename;
         String gvfFilePath = rootPath +  "\\" + gvfFilename;
 
+        System.out.println(fileName);
         System.out.println(gvvFilePath);
-        System.out.println(gvfFilePath);
 
         List<Path> files = Arrays.asList(Paths.get(gvvFilePath),
                 Paths.get(gvfFilePath));
 
         response.setContentType("application/zip"); // zip archive format
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
-                .filename("download.zip", StandardCharsets.UTF_8)
+                .filename(fileName + ".zip", StandardCharsets.UTF_8)
                 .build()
                 .toString());
 
