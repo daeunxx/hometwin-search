@@ -17,23 +17,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.models.media.MediaType;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.TableGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,7 +51,7 @@ public class searchController {
         return "index";
     }
 
-    @Operation(summary = "홈 트윈 아파트 리스트 출력", description = "키워드에 해당하는 아파트 리스트 출력")
+    @Operation(summary = "홈 트윈 아파트 검색 리스트 출력", description = "키워드에 해당하는 아파트 리스트 출력")
     @GetMapping("/search/all_data")
     public String apartmentList(String keyword, Model model) throws IOException {
         String query = URLEncoder.encode(keyword, "UTF-8");
@@ -122,7 +114,7 @@ public class searchController {
     }
 
     @Operation(summary = "도면 썸네일 출력", description = "아파트 코드와 평형 정보에 해당하는 도면 썸네일 출력")
-    @RequestMapping("/get/image/thumbnail")
+    @GetMapping("/get/image/thumbnail")
     public String apartmentThumbnail(String aptCode, String sizeType, String styleType, Model model, HttpServletRequest request) throws IOException {
 
         String url = "https://flooropt.prod.genieverse.co.kr/get/image/thumbnail?"
@@ -140,7 +132,7 @@ public class searchController {
     }
 
     @Operation(summary = "홈 트윈 파일 다운로드", description = "gvv/gvf 콘텐츠 파일 다운로드")
-    @GetMapping("/get/hometwin")
+    @PostMapping("/get/hometwin")
     public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model, HttpServletResponse response) throws IOException, Exception {
         StringBuilder builder = searchService.getHomeTwinData(aptCode, sizeType, styleType);
 

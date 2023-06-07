@@ -14,21 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public GroupedOpenApi group1(){
-        String[] packagesToScan = {"com.example.hometwin.src"};
-
-        return GroupedOpenApi.builder()
-                .group("group1")
-                .packagesToScan(packagesToScan)
-                .build();
-    }
-
-    @Bean
     public OpenAPI openAPI(){
         Info info = new Info()
                 .title("Geniverse HomeTwin Search Web")
                 .description("Geniverse HomeTwin Search Web(For developer testing)")
-                .version("1.0.0");
+                .version("v1.0.0");
         return new OpenAPI()
                 .components(new Components())
                 .info(info);
