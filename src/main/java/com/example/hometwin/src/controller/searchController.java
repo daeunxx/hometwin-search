@@ -132,7 +132,7 @@ public class searchController {
     }
 
     @Operation(summary = "홈 트윈 파일 다운로드", description = "gvv/gvf 콘텐츠 파일 다운로드")
-    @PostMapping("/get/hometwin")
+    @GetMapping("/get/hometwin")
     public void getHomeTwinFile(String aptCode, String sizeType, String styleType, Model model, HttpServletResponse response) throws IOException, Exception {
         StringBuilder builder = searchService.getHomeTwinData(aptCode, sizeType, styleType);
 
